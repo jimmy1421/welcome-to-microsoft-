@@ -1,0 +1,154 @@
+import numpy as np 
+import random as rm 
+# The statespace 
+states = ["Drilling","Milling","Boring"] 
+# Possible sequences of events 
+transitionName = [["DD","DB","DM"],["BD","BB","BM"],["MR","MB","MM"]] 
+# Probabilities matrix (transition matrix) 
+transitionMatrix = [[0.2,0.6,0.2],[0.1,0.6,0.3],[0.2,0.7,0.1]] 
+if sum(transitionMatrix[0])+sum(transitionMatrix[1])+sum(transitionMatrix[1]) != 
+3: 
+print("Somewhere, something went wrong. Transition matrix, perhaps?") 
+else: print("Nothing wrong upto here, Move ahead!! ;)")
+
+
+
+# A function that implements the Markov model to forecast the state/mood. 
+def activity_forecast(days): 
+# Choose the starting state 
+activityToday = "Drilling" 
+print("Start state: " + activityToday) 
+# Shall store the sequence of states taken. So, this only has the starting 
+state for now. 
+activityList = [activityToday] 
+i = 0 
+# To calculate the probability of the activityList 
+prob = 1 
+while i != days: 
+if activityToday == "Drilling": 
+change = 
+np.random.choice(transitionName[0],replace=True,p=transitionMatrix[0]) 
+if change == "DD": 
+prob = prob * 0.2 
+activityList.append("Drilling") 
+pass 
+elif change == "DB": 
+prob = prob * 0.6 
+activityToday = "Boring" 
+activityList.append("Boring") 
+else: 
+prob = prob * 0.2 
+activityToday = "Milling" 
+activityList.append("Milling") 
+elif activityToday == "Boring": 
+change = 
+np.random.choice(transitionName[1],replace=True,p=transitionMatrix[1]) 
+if change == "BB": 
+prob = prob * 0.5 
+activityList.append("Boring") 
+pass 
+elif change == "BD": 
+prob = prob * 0.2 
+activityToday = "Drilling" 
+activityList.append("Drilling") 
+else: 
+prob = prob * 0.3 
+activityToday = "Milling" 
+activityList.append("Milling") 
+elif activityToday == "Milling": 
+change = 
+np.random.choice(transitionName[2],replace=True,p=transitionMatrix[2]) 
+if change == "MM": 
+prob = prob * 0.1 
+activityList.append("Milling") 
+pass 
+elif change == "MD": 
+prob = prob * 0.2 
+activityToday = "Drilling" 
+activityList.append("Drilling") 
+else: 
+prob = prob * 0.7 
+activityToday = "Boring" 
+activityList.append("Boring") 
+i += 1 
+print("Possible states: " + str(activityList)) 
+print("End state after "+ str(days) + " days: " + activityToday) 
+print("Probability of the possible sequence of states:{:.2f} ".format(prob)) 
+# Function that forecasts the possible state for the next 2 iterations 
+activity_forecast(2)
+
+
+
+def activity_forecast(days): 
+# Choose the starting state 
+activityToday = "Drilling" 
+activityList = [activityToday] 
+i = 0 
+prob = 1 
+while i != days: 
+if activityToday == "Drilling": 
+change = 
+np.random.choice(transitionName[0],replace=True,p=transitionMatrix[0]) 
+if change == "DD": 
+prob = prob * 0.2 
+activityList.append("Drilling") 
+pass 
+elif change == "DB": 
+prob = prob * 0.6 
+activityToday = "Boring" 
+activityList.append("Boring") 
+else: 
+prob = prob * 0.2 
+activityToday = "Milling" 
+activityList.append("Milling") 
+elif activityToday == "Boring": 
+change = 
+np.random.choice(transitionName[1],replace=True,p=transitionMatrix[1]) 
+if change == "BB": 
+prob = prob * 0.5 
+activityList.append("Boring") 
+pass 
+elif change == "BD": 
+prob = prob * 0.2 
+activityToday = "Drilling" 
+activityList.append("Drilling") 
+else: 
+prob = prob * 0.3 
+activityToday = "Milling" 
+activityList.append("Milling") 
+elif activityToday == "Milling": 
+change = 
+np.random.choice(transitionName[2],replace=True,p=transitionMatrix[2]) 
+if change == "MM": 
+prob = prob * 0.1 
+activityList.append("Milling") 
+pass 
+elif change == "MD": 
+prob = prob * 0.2 
+activityToday = "Drilling" 
+activityList.append("Drilling") 
+else: 
+prob = prob * 0.7 
+activityToday = "Boring" 
+activityList.append("Boring") 
+i += 1 
+return activityList 
+# To save every activityList 
+list_activity = [] 
+count = 0 
+# `Range` starts from the first count up until but excluding the last 
+count 
+for iterations in range(1,10000): 
+list_activity.append(activity_forecast(2)) 
+# Check out all the `activityList` we collected 
+#print(list_activity) 
+# Iterate through the list to get a count of all activities ending in 
+state:'Boring' 
+for smaller_list in list_activity: 
+if(smaller_list[2] == "Boring"): 
+count += 1 
+# Calculate the probability of starting from state:'Drilling' and ending 
+at state:'Boring' 
+percentage = (count/10000) * 100 
+print("The probability of starting at state:'Drilling' and ending at 
+state:'Boring'= " + str(percentage) + "%")
