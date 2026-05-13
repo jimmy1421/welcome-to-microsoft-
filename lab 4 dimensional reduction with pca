@@ -1,0 +1,25 @@
+from sklearn import datasets
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+import seaborn as sns
+import matplotlib.pyplot as plt # Import matplotlib for plotting
+iris = datasets.load_iris()
+df = pd.DataFrame(iris['data'], columns=iris['feature_names'])
+df.head()
+
+scaler = StandardScaler() # Corrected StandScaler to StandardScaler
+scaled_data = pd.DataFrame(scaler.fit_transform(df), columns=iris['feature_n
+scaled_data.head()
+
+sns.heatmap(scaled_data.corr())
+plt.show() # Display the heatmap
+
+pca = PCA(n_components=3)
+pca.fit(scaled_data)
+data_pca = pca.transform(scaled_data)
+data_pca = pd.DataFrame(data_pca,columns=['PC1','PC2','PC3'])
+data_pca.head()
+
+sns.heatmap(data_pca.corr()) # Corrected sna.heatmap to sns.heatmap
+plt.show() # Display the heatmap
