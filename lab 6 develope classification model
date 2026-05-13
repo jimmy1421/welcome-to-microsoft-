@@ -1,0 +1,60 @@
+# 1. Import Libraries
+# ------------------------------
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+from sklearn.metrics import accuracy_score, confusion_matrix, 
+warnings.filterwarnings("ignore")
+
+from google.colab import files
+uploaded = files.upload()
+
+import io
+df = pd.read_csv('
+/content/admission_data.csv')
+
+df_features = ['GRE Score','TOEFL Score','University Rating','SOP','CGPA']
+X = df[df_features]   # Features
+y = df['Chance of Admit']   # Target
+# If 'Admitted' is meant to be a binary target (0 or 1),
+# you can binarize 'Chance of Admit' using a threshold.
+# For example, let's assume a threshold of 0.5:
+y = (y > 0.5).astype(int)
+
+from sklearn.preprocessing import StandardScaler
+ssc = StandardScaler()
+X = pd.DataFrame(ssc.fit_transform(X), columns=X.columns)
+X_train, X_test, Y_train, Y_test = train_test_split(
+X, y, test_size=0.30, random_state=12
+)
+
+clf = DecisionTreeClassifier()
+clf = clf.fit(X_train, Y_train)
+
+y_pred = clf.predict(X_test)
+print("Accuracy:", metrics.accuracy_score(Y_test, y_pred))
+
+from sklearn.tree import export_graphviz
+from io import StringIO
+from IPython.display import Image
+import pydotplus
+import graphviz
+dot_data = StringIO()
+dot_data = export_graphviz(
+clf,
+out_file=None,
+filled=True,
+rounded=True,
+special_characters=True,
+feature_names=df_features,
+class_names=['0','1']
+)
+graph = graphviz.Source(dot_data)
+graph = pydotplus.graph_from_dot_data(dot_data)
+graph.write_png('admission.png')
+Image(graph.create_png())
