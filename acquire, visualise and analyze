@@ -1,0 +1,35 @@
+#read data or aquire 
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+# Load dataset
+df = pd.read_csv("
+/content/sales_profit.csv")
+print(df)
+
+#count plot 
+sns.countplot(x=df.index)
+plt.title("Count Plot")
+plt.xlabel("Index")
+plt.show()
+
+#pie chart
+sales = df["Sales"][:9]
+labels = [str(i) for i in range(1, 10)]
+plt.figure(figsize=(8,8))
+plt.pie(sales, labels=labels, autopct='%1.1f%%')
+plt.title("Sales Distribution (First 9 entries)")
+plt.show()
+
+#box plot
+plt.boxplot([df['Sales'], df['Profit']], labels=['Sales', 'Profit'])
+plt.title("Box Plot")
+plt.show()
+
+#graph
+plt.plot(range(25), df['Sales'], marker='o')
+plt.xlabel("Years")
+plt.ylabel("Sales")
+plt.title("Sales Over 25 Years")
+plt.show()
